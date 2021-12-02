@@ -7,28 +7,9 @@ import java.util.Scanner; // Import the Scanner class to read text files
 
 public class Main {
     public static void main(String[] args) {
-        int[] input = importData();
-        int answer= AOC1(input);
-        System.out.println(answer);
-    }
-    public static int AOC1(int[] input) {
-        List<Integer> blocks = new ArrayList<>();
-        for (int i = 1; i < input.length-1; i++) {
-            int block = input[i-1]+input[i]+input[i+1];
-            blocks.add(block);
-        }
-        int counter=0;
-        for (int i = 1; i < blocks.size(); i++) {
-            if(blocks.get(i)> blocks.get(i-1)) {
-                counter++;
-            }
-        }
-        return counter;
-    }
-    static int[] importData() {
         String data ="";
         try {
-            File myObj = new File("/Users/max/Documents/input.txt");
+            File myObj = new File("/Users/max/Documents/AOCInput/inputDay2.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 data += myReader.nextLine()+" ";
@@ -38,11 +19,33 @@ public class Main {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+        System.out.println(data);
         String[] array = data.split((" "));
-        int[] intArray = new int[array.length];
-        for (int i = 0; i < array.length; i++) {
-            intArray[i]=Integer.valueOf(array[i]);
+        int distance;
+        String command;
+        int horizontal=0;
+        int depth=0;
+        int aim=0;
+        for (int i = 0; i < array.length; i+=2) {
+                command = array[i];
+                distance = Integer.valueOf(array[i+1]);
+
+
+            switch(command)
+            {
+                case "forward" :
+                    horizontal+=distance;
+                    depth += distance*aim;
+                    break;
+                case "up" :
+                    aim-=distance;
+                    break;
+                case "down" :
+                    aim+=distance;
+                    break;
+
+            }
         }
-        return intArray;
+        System.out.println(depth*horizontal);
     }
 }
