@@ -12,90 +12,75 @@ import java.util.Scanner; // Import the Scanner class to read text files
 public class Main {
     public static void main(String[] args) {
         String data = "";
-        String bingoNumbers = "";
+        int[][] ventsMap = new int[10][10];
+        int[][] ventsLocation = new int[0][0];
 
         ArrayList<Integer> numbers = new ArrayList<Integer>();
+        int countLines = 0;
 
         try {
-            File myObj = new File("/Users/max/Documents/AOCInput/inputDay4.txt");
+            File myObj = new File("/Users/max/Documents/AOCInput/inputDay5.txt");
             Scanner myReader = new Scanner(myObj);
-            bingoNumbers += myReader.nextLine();
-
-            while (myReader.hasNextInt()) {
-                numbers.add(myReader.nextInt());
+            while (myReader.hasNextLine()) {
+                myReader.nextLine();
+                countLines++;
             }
+            myObj = new File("/Users/max/Documents/AOCInput/inputDay5.txt");
+            myReader = new Scanner(myObj);
+            ventsLocation = new int[countLines][4];
+            myReader.useDelimiter(",| -> |\n");
+            int x = 0;
+            int y = 0;
+            while (myReader.hasNext()) {
+                ventsLocation[y][x]= Integer.valueOf(myReader.nextInt());
+                x++;
+                if(x==4) {
+                    x=0;
+                    y++;
+                }
+            }
+            //data += myReader.nextLine();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        String[] tempSplit = bingoNumbers.split(",");
-        System.out.println(bingoNumbers);
+        for (int i = 0; i < countLines; i++) {
 
-        int[] bingoNumbersSplited = new int[tempSplit.length];
-
-
-        for (int i = 0; i < tempSplit.length - 1; i++) {
-            bingoNumbersSplited[i] = Integer.valueOf(tempSplit[i]);
-        }
-        int howmany = bingoNumbers.length() / 25;
-        int[][] temp2dArray = new int[5][5];
-        ArrayList<BingoCard> bingoCardsObjects = new ArrayList<BingoCard>();
-        int x = 0;
-        int y = 0;
-        int counter =0;
-        for (int i = 0; i < numbers.size(); i++) {
-            temp2dArray[x][y] = numbers.get(i);
-            y++;
-            counter++;
-            if (y == 5) {
-                y = 0;
-                x++;
-            }
-            if(counter==25) {
-                y=0;
-                x=0;
-                bingoCardsObjects.add(new BingoCard(temp2dArray));
-                temp2dArray = new int[5][5];
-                counter=0;
-            }
-        }
-        System.out.println(numbers);
-        System.out.println(bingoNumbersSplited.length);
-        int winnerNumber=0;
-        int[] victories = new int[bingoCardsObjects.size()];
-        int wins = 0;
-        outer:
-        for (int i = 0; i < bingoNumbersSplited.length; i++) {
-            int winner = 0;
-            for (BingoCard bingo: bingoCardsObjects
-                 ) {
-                if(!bingo.win) {
-                    bingo.find(bingoNumbersSplited[i]);
-                    System.out.println(bingoNumbersSplited[i]);
-                    if (bingo.checkWin()) {
-                        wins++;
-                        bingo.win = true;
-                        winnerNumber = bingoNumbersSplited[i];
-                        System.out.println(winner + " test");
-                        System.out.println(bingo.sumOfNonMarked());
-                        System.out.println(winnerNumber * bingo.sumOfNonMarked());
-                    }
-                    if(wins==bingoCardsObjects.size()) {
-
-
-                        break outer;
-                    }
+            if(ventsLocation[i][1]==ventsLocation[i][3]) {
+                if(ventsLocation[i][0]> ventsLocation[i][2]) {
+                    int temp = ventsLocation[i][0];
+                    ventsLocation[i][0] = ventsLocation[i][2];
+                    ventsLocation[i][2] = temp;
                 }
-
-                winner++;
+                System.out.println(i+" test!");
+                for (int j = ventsLocation[i][0]; j <= ventsLocation[i][2]; j++) {
+                    ventsMap[ventsLocation[i][1]][j]++;
+                }
             }
+            //2,2 -> 2,1
+            else if(ventsLocation[i][0]==ventsLocation[i][2]) {
+                if(ventsLocation[i][1]> ventsLocation[i][3]) {
+                    int temp = ventsLocation[i][1];
+                    ventsLocation[i][1] = ventsLocation[i][3];
+                    ventsLocation[i][3] = temp;
+                }
+                System.out.println(i+" test!");
+                for (int j = ventsLocation[i][1]; j <= ventsLocation[i][3]; j++) {
+                    ventsMap[j][ventsLocation[i][2]]++;
+                }
+            }
+
         }
-        for (BingoCard bingo: bingoCardsObjects
-             ) {
-            bingo.printMask();
+        int counter=0;
+        int countVents=0;
+        for (int x = 0; x < ventsMap.length; x++) {
+            for (int y = 0; y < ventsMap.length; y++) {
+                if(ventsMap[x][y]>1) {
+                    countVents++;
+                }
+            }
+
         }
-
-
-
+        System.out.println("result "+countVents);
     }
 }
