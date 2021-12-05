@@ -6,103 +6,96 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import java.util.Scanner; // Import the Scanner class to read text files
 
 public class Main {
     public static void main(String[] args) {
         String data = "";
-        List<String> array = new ArrayList<String>();
-        String x="";
-        String y ="";
+        String bingoNumbers = "";
+
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
 
         try {
-            File myObj = new File("/Users/max/Documents/AOCInput/inputDay3.txt");
+            File myObj = new File("/Users/max/Documents/AOCInput/inputDay4.txt");
             Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                array.add(myReader.nextLine());
+            bingoNumbers += myReader.nextLine();
+
+            while (myReader.hasNextInt()) {
+                numbers.add(myReader.nextInt());
             }
-            myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+        String[] tempSplit = bingoNumbers.split(",");
+        System.out.println(bingoNumbers);
 
-        List<String> arrayCopy = new ArrayList<>(array);
-        System.out.println(arrayCopy.size());
-        int[] binaryCounter = new int[array.get(0).length()];
+        int[] bingoNumbersSplited = new int[tempSplit.length];
 
-        char tempChar = '0';
 
+        for (int i = 0; i < tempSplit.length - 1; i++) {
+            bingoNumbersSplited[i] = Integer.valueOf(tempSplit[i]);
+        }
+        int howmany = bingoNumbers.length() / 25;
+        int[][] temp2dArray = new int[5][5];
+        ArrayList<BingoCard> bingoCardsObjects = new ArrayList<BingoCard>();
+        int x = 0;
+        int y = 0;
+        int counter =0;
+        for (int i = 0; i < numbers.size(); i++) {
+            temp2dArray[x][y] = numbers.get(i);
+            y++;
+            counter++;
+            if (y == 5) {
+                y = 0;
+                x++;
+            }
+            if(counter==25) {
+                y=0;
+                x=0;
+                bingoCardsObjects.add(new BingoCard(temp2dArray));
+                temp2dArray = new int[5][5];
+                counter=0;
+            }
+        }
+        System.out.println(numbers);
+        System.out.println(bingoNumbersSplited.length);
+        int winnerNumber=0;
+        int[] victories = new int[bingoCardsObjects.size()];
+        int wins = 0;
         outer:
-        for (int i = 0; i < binaryCounter.length; i++) {
-            for (String binary : array) {
-                if (binary.charAt(i) == '1') {
-                    binaryCounter[i]++;
-                } else {
-                    binaryCounter[i]--;
-                }
-            }
-            if (binaryCounter[i] >= 0) {
-                tempChar = '1';
-            } else {
-                tempChar = '0';
-            }
+        for (int i = 0; i < bingoNumbersSplited.length; i++) {
+            int winner = 0;
+            for (BingoCard bingo: bingoCardsObjects
+                 ) {
+                if(!bingo.win) {
+                    bingo.find(bingoNumbersSplited[i]);
+                    System.out.println(bingoNumbersSplited[i]);
+                    if (bingo.checkWin()) {
+                        wins++;
+                        bingo.win = true;
+                        winnerNumber = bingoNumbersSplited[i];
+                        System.out.println(winner + " test");
+                        System.out.println(bingo.sumOfNonMarked());
+                        System.out.println(winnerNumber * bingo.sumOfNonMarked());
+                    }
+                    if(wins==bingoCardsObjects.size()) {
 
-            for (int j = 0; j < array.size(); j++) {
-                if(array.get(j).charAt(i)!=tempChar) {
-                    System.out.println(array.get(j));
-                    array.remove(j);
-                    System.out.println(array.size());
-                    if(array.size()==1){
-                        x=array.get(0);
+
                         break outer;
                     }
-                    j--;
+                }
 
-                }
-            }
-            if(i == binaryCounter.length-1) {
-                i=0;
+                winner++;
             }
         }
-        binaryCounter = new int[array.get(0).length()];
-        System.out.println(binaryCounter.length);
-        outerTop:
-        for (int i = 0; i < binaryCounter.length; i++) {
-            for (String binary : arrayCopy) {
-                if (binary.charAt(i) == '1') {
-                    binaryCounter[i]++;
-                } else {
-                    binaryCounter[i]--;
-                }
-            }
-            if (binaryCounter[i] < 0) {
-                tempChar = '1';
-            } else {
-                tempChar = '0';
-            }
-            for (int j = 0; j < arrayCopy.size(); j++) {
-                if (arrayCopy.get(j).charAt(i) != tempChar) {
-                    System.out.println(arrayCopy.get(j));
-                    y=arrayCopy.get(j);
-                    arrayCopy.remove(j);
-                    if(arrayCopy.size()==1){
-                        y=arrayCopy.get(0);
-                        break outerTop;
-                    }
-                    j--;
-                }
-            }
-            if(i == binaryCounter.length-1) {
-                i=0;
-            }
+        for (BingoCard bingo: bingoCardsObjects
+             ) {
+            bingo.printMask();
         }
-        System.out.println("------");
-        System.out.println(x);
-        System.out.println(y);
-        int result = Integer.valueOf(x,2)*Integer.valueOf(y,2);
-        System.out.println(result);
+
+
 
     }
-
 }
