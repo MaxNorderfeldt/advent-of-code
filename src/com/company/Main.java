@@ -3,223 +3,140 @@ package com.company;
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import java.util.Scanner; // Import the Scanner class to read text files
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<String> data = new ArrayList<String>();
-        ArrayList<String> outputs = new ArrayList<String>();
-        ArrayList<String> inputs = new ArrayList<String>();
+        int basinCounter=0;
+        ArrayList<String> input = new ArrayList<String>();
 
         try {
-            File myObj = new File("/Users/max/Documents/AOCInput/inputDay8.txt");
+            File myObj = new File("/Users/max/Documents/AOCInput/inputDay9.txt");
             Scanner myReader = new Scanner(myObj);
-            int counter = 0;
-
-
-            System.out.println();
-
             while (myReader.hasNext()) {
-                data.add(myReader.nextLine());
+                input.add(myReader.nextLine());
             }
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        String number = "";
-        long sum = 0;
-        for (String line : data
-        ) {
-            String[] temp = line.split("\\|");
-            inputs.add(temp[0]);
-            outputs.add(temp[1]);
+        int height = input.size();
+        int width = input.get(0).length();
+        int adjLocations = 4;
+        int higherLocations = 0;
+        int[][] heightMap = new int[height][width];
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                heightMap[y][x] = Character.getNumericValue(input.get(y).charAt(x));
+            }
         }
-        int countNumbers = 0;
-        for (int i = 0; i < inputs.size(); i++) {
-            String[] temp = inputs.get(i).split(" ");
-            String one = "", seven = "", four = "", eight = "";
-            ArrayList<String> sixes = new ArrayList<String>();
-            ArrayList<String> fives = new ArrayList<String>();
-            for (String input : temp
-            ) {
-                int l = input.length();
-                //code below gets the known numbers
+        ArrayList<Integer> basins = new ArrayList<Integer>();
 
-                if (l == 2) {
-                    one = input;
-                } else if (l == 3) {
-                    seven = input;
-                } else if (l == 4) {
-                    four = input;
-                } else if (l == 7) {
-                    eight = input;
-                } else if (l == 6) {
-                    sixes.add(input);
-                } else if (l == 5) {
-                    fives.add(input);
+        ArrayList<String> lowPoints = new ArrayList<String>();
+        int currentPos = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                adjLocations = 4;
+                higherLocations = 0;
+                currentPos = heightMap[y][x];
+                if (y - 1 >= 0) {
+                    if (currentPos < heightMap[y - 1][x]) {
+                        higherLocations++;
+                    }
+                } else {
+                    adjLocations--;
+                }
+                if (y + 1 < heightMap.length) {
+                    if (currentPos < heightMap[y + 1][x]) {
+                        higherLocations++;
+                    }
+                } else {
+                    adjLocations--;
+                }
+                if (x - 1 >= 0) {
+                    if (currentPos < heightMap[y][x - 1]) {
+                        higherLocations++;
+                    }
+                } else {
+                    adjLocations--;
                 }
 
-            }
-            char a = ' ';
-            String tempChar = seven;
-            for (char part : one.toCharArray()
-            ) {
-                tempChar = tempChar.replace(String.valueOf(part), "");
-            }
-            a = tempChar.charAt(0);
-
-
-            char g = ' ';
-            //code below gets the nine so that i can use it to get G
-            String nine = "";
-            for (String sixLetterNumber : sixes
-            ) {
-                int counter = 0;
-                for (int j = 0; j < four.length(); j++) {
-                    String testI = String.valueOf(four.charAt(j));
-                    if (sixLetterNumber.contains(testI)) {
-                        counter++;
+                if (x + 1 < width) {
+                    if (currentPos < heightMap[y][x + 1]) {
+                        higherLocations++;
                     } else {
-                        break;
                     }
-                    if (counter == 4) {
-                        nine = sixLetterNumber;
-                    }
+                } else {
+                    adjLocations--;
+                }
+                if (higherLocations == adjLocations) {
+                    lowPoints.add(String.valueOf(y) +" "+ String.valueOf(x));
                 }
             }
-
-            tempChar = nine;
-            for (char part : four.toCharArray()
-            ) {
-                tempChar = tempChar.replace(String.valueOf(part), "");
-                tempChar = tempChar.replace(String.valueOf(a), "");
-            }
-            g = tempChar.charAt(0);
-
-            char e = ' ';
-
-            tempChar = eight;
-            for (char part : nine.toCharArray()
-            ) {
-                tempChar = tempChar.replace(String.valueOf(part), "");
-            }
-            e = tempChar.charAt(0);
-
-
-            String three = "";
-            for (String fiveLetterNumber : fives
-            ) {
-                int counter = 0;
-                for (int j = 0; j < one.length(); j++) {
-                    String testI = String.valueOf(one.charAt(j));
-                    if (fiveLetterNumber.contains(testI)) {
-                        counter++;
-                    } else {
-                        break;
-                    }
-                    if (counter == 2) {
-                        three = fiveLetterNumber;
-                    }
-                }
-            }
-            tempChar = three;
-            char d = ' ';
-            for (char part : seven.toCharArray()
-            ) {
-                tempChar = tempChar.replace(String.valueOf(part), "");
-                tempChar = tempChar.replace(String.valueOf(g), "");
-            }
-            d = tempChar.charAt(0);
-
-            tempChar = four;
-            char b = ' ';
-            for (char part : one.toCharArray()
-            ) {
-                tempChar = tempChar.replace(String.valueOf(part), "");
-                tempChar = tempChar.replace(String.valueOf(d), "");
-            }
-            b = tempChar.charAt(0);
-            String de = String.valueOf(d) + e;
-            String six = "";
-            for (String sixLetterNumber : sixes
-            ) {
-                int counter = 0;
-                for (int j = 0; j < de.length(); j++) {
-                    String testI = String.valueOf(de.charAt(j));
-                    if (sixLetterNumber.contains(testI)) {
-                        counter++;
-                    } else {
-                        break;
-                    }
-                    if (counter == 2) {
-                        six = sixLetterNumber;
-                    }
-                }
-            }
-            tempChar = six;
-            char f = ' ';
-            tempChar = tempChar.replace(String.valueOf(g), "");
-            tempChar = tempChar.replace(String.valueOf(a), "");
-            tempChar = tempChar.replace(String.valueOf(d), "");
-            tempChar = tempChar.replace(String.valueOf(e), "");
-            tempChar = tempChar.replace(String.valueOf(b), "");
-
-            f = tempChar.charAt(0);
-
-            tempChar = seven;
-            char c = ' ';
-            tempChar = tempChar.replace(String.valueOf(a), "");
-            tempChar = tempChar.replace(String.valueOf(f), "");
-
-            c = tempChar.charAt(0);
-
-            System.out.println(outputs.size());
-
-            for (String t : outputs.get(i).split(" ")
-            ) {
-                //System.out.println(t);
-            }
-            number = "";
-            String[] splitOutput = outputs.get(i).split(" ");
-
-            for (int j = 0; j < splitOutput.length; j++) {
-                String word = splitOutput[j];
-                // System.out.println(word);
-                int l = word.length();
-                if (l == 2) {
-                    number += 1;
-                } else if (l == 3) {
-                    number += 7;
-                } else if (l == 4) {
-                    number += 4;
-                } else if (l == 7) {
-                    number += 8;
-                } else if (word.contains(Character.toString(a)) && word.contains(Character.toString(b)) && word.contains(Character.toString(c)) && word.contains(Character.toString(d)) && word.contains(Character.toString(f)) && word.contains(Character.toString(g))) {
-                    number += 9;
-                } else if (word.contains(Character.toString(a)) && word.contains(Character.toString(b)) && word.contains(Character.toString(c)) && word.contains(Character.toString(e)) && word.contains(Character.toString(f)) && word.contains(Character.toString(g))) {
-                    number += 0;
-                } else if (word.contains(Character.toString(a)) && word.contains(Character.toString(b)) && word.contains(Character.toString(d)) && word.contains(Character.toString(e)) && word.contains(Character.toString(f)) && word.contains(Character.toString(g))) {
-                    number += 6;
-                } else if (word.contains(Character.toString(a)) && word.contains(Character.toString(b)) && word.contains(Character.toString(d)) && word.contains(Character.toString(f)) && word.contains(Character.toString(g))) {
-                    number += 5;
-                } else if (word.contains(Character.toString(a)) && word.contains(Character.toString(c)) && word.contains(Character.toString(d)) && word.contains(Character.toString(f)) && word.contains(Character.toString(g))) {
-                    number += 3;
-                }else if (word.contains(Character.toString(a)) && word.contains(Character.toString(c)) && word.contains(Character.toString(d)) && word.contains(Character.toString(e)) && word.contains(Character.toString(g))) {
-                    number += 2;
-                }
-
-                System.out.println(number);
-            }
-            System.out.println(sum += Integer.valueOf(number));
         }
 
+        int sum = 0;
+        ArrayList<String> posToSearch = new ArrayList<String>();
+        ArrayList<Integer> basinArray = new ArrayList<Integer>();
+        for (String i : lowPoints) {
+            posToSearch.add(i);
+            //heightMap[Integer.valueOf(i.split(" ")[0])][Integer.valueOf(i.split(" ")[1])] = 9;
+            int counter=0;
+            basinCounter=0;
+            while(posToSearch.size()>0) {
+                int y = Integer.valueOf(posToSearch.get(0).split(" ")[0]);
+                int x = Integer.valueOf(posToSearch.get(0).split(" ")[1]);
+                if (y < heightMap.length - 1) {
+                    System.out.println("ultimate test");
+                    if (heightMap[y + 1][x] != 9) {
+                        System.out.println("ultimateTest2");
+                        System.out.println("hit" + y + " " + x);
+                        posToSearch.add(String.valueOf(y + 1) +" "+ String.valueOf(x));
+                        heightMap[y+1][x] = 9;
+                        basinCounter++;
+                    }
+                }
+                if (y > 0) {
+                    if (heightMap[y - 1][x] != 9) {
+                        System.out.println("hity-end" + y + " " + x);
+                        posToSearch.add(String.valueOf(y - 1) +" "+ String.valueOf(x));
+                        heightMap[y-1][x] = 9;
+                        basinCounter++;
+                    }
+                }
+                if (x < width-1) {
+                    if (heightMap[y][x+1] != 9) {
+                        System.out.println("hit" + y + " " + x);
+                        posToSearch.add(String.valueOf(y) +" "+ String.valueOf(x+1));
+                        heightMap[y][x+1] = 9;
+                        basinCounter++;
+                    }
+                }
+                if (x > 0) {
+                    if (heightMap[y][x-1] != 9) {
+                        System.out.println("hitx end" + y + " " + x);
+                        posToSearch.add(String.valueOf(y) +" "+ String.valueOf(x-1));
+                        heightMap[y][x-1] = 9;
+                        basinCounter++;
+                    }
+                }
+                posToSearch.remove(counter);
+            }
+            System.out.println();
+            System.out.println();
+            basinArray.add(basinCounter);
+            System.out.println(i);
+        }
+        System.out.println(posToSearch.toString());
+        System.out.println(basinCounter);
+        System.out.println("----");
+        System.out.println(basinArray.toString());
+        System.out.println("----");
+        Collections.sort(basinArray);
+        Collections.reverse(basinArray);
+        System.out.println(basinArray.get(0)+" "+basinArray.get(1)+" "+basinArray.get(2));
+        System.out.println(basinArray.get(0)*basinArray.get(1)*basinArray.get(2));
 
     }
-
-
 }
-
