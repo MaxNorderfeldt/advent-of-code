@@ -1,12 +1,10 @@
 package mn.adventofcode.year2021;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
-
+/*There are Squids in a xy map represented by 0-9, each step all squids increase by one
+When a squid reach 10 or higher they light upp all adjecant tiles(including dioganal)
+Objective is to see find at which step all squids light up*/
 
 public class Day11 {
     public static int getResult() {
