@@ -1,5 +1,7 @@
 package mn.adventofcode.year2021;
 
+import mn.adventofcode.year2021.utilities.HelperMethods;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,5 +1,9 @@
 package mn.adventofcode.year2021;
 
+//Use commands to calculate the depth and position of the submarine
+
+import mn.adventofcode.year2021.utilities.HelperMethods;
+
 public class Day2 {
     public static int getResult() {
         String input = HelperMethods.readInputString(2);
@@ -23,7 +27,6 @@ public class Day2 {
                 case "down":
                     aim += distance;
                     break;
-
             }
         }
         return depth * horizontal;

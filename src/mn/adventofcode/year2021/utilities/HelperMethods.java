@@ -1,9 +1,11 @@
-package mn.adventofcode.year2021;
+package mn.adventofcode.year2021.utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+//helper class for day4 challenge
 
 public class HelperMethods {
     public static ArrayList<String> readInput(int day) {

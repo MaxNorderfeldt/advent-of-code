@@ -5,9 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class Day1Test {
+class Day9Test {
+
     @Test
     void getResult() {
-        Assertions.assertEquals(1362, Day1.getResult());
+        Assertions.assertEquals(1327014, Day9.getResult());
     }
 }

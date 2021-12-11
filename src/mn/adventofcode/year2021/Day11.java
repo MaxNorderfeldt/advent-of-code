@@ -1,5 +1,7 @@
 package mn.adventofcode.year2021;
 
+import mn.adventofcode.year2021.utilities.HelperMethods;
+
 import java.util.ArrayList;
 
 /*There are Squids in a xy map represented by 0-9, each step all squids increase by one
@@ -8,7 +10,7 @@ Objective is to see find at which step all squids light up*/
 
 public class Day11 {
     public static int getResult() {
-        ArrayList<String> input =HelperMethods.readInput(11);
+        ArrayList<String> input = HelperMethods.readInput(11);
         int height = input.size();
         int width = input.get(0).length();
         int[][] squids = new int[height][width];
