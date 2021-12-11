@@ -35,4 +35,18 @@ public class HelperMethods {
         }
         return input;
     }
+    public static String readInputString(int day) {
+        String input = "";
+        try {
+            File myObj = new File("/Users/max/Documents/AOCInput/inputDay"+day+".txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                input+= myReader.nextLine()+" ";
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return input;
+    }
 }

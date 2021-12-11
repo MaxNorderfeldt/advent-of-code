@@ -2,6 +2,7 @@ package mn.adventofcode;
 
 import mn.adventofcode.year2021.Day1;
 import mn.adventofcode.year2021.Day11;
+import mn.adventofcode.year2021.Day2;
 
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
@@ -14,6 +15,13 @@ public class Main {
         System.out.println("methodTest "+ Day1.getResult());
         long endTime = System.nanoTime();
         long duration = (endTime - startTime)/1000_000;
+        System.out.println(duration);
+
+        //Test 2
+
+        System.out.println("methodTest "+ Day2.getResult());
+        endTime = System.nanoTime();
+        duration = (endTime - startTime)/1000_000;
         System.out.println(duration);
 
         //Test 11
