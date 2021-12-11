@@ -12,7 +12,7 @@ public class Main {
         ArrayList<String> input = new ArrayList<String>();
 
         try {
-            File myObj = new File("/Users/max/Documents/AOCInput/inputDay10.txt");
+            File myObj = new File("/Users/max/Documents/AOCInput/inputDay11.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNext()) {
                 input.add(myReader.nextLine());
@@ -21,82 +21,70 @@ public class Main {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        ArrayList<Character> brackets = new ArrayList<Character>();
-        ArrayList<Long> results = new ArrayList<Long>();
-        ArrayList<Character> syntaxErrors = new ArrayList<Character>();
-        char currentChar = ' ';
-        Long sum = 0l;
-
-        for (String line : input) {
-            boolean switcher=true;
-            for (int i = 0; i < line.length(); i++) {
-                currentChar = line.charAt(i);
-                if (currentChar == ')') {
-                    if (brackets.get(brackets.size() - 1) == '(') {
-                        brackets.remove(brackets.size() - 1);
-                    } else {
-                        syntaxErrors.add(currentChar);
-                        switcher=false;
-                        break;
-                    }
-                } else if (currentChar == '}') {
-                    if (brackets.get(brackets.size() - 1) == '{') {
-                        brackets.remove(brackets.size() - 1);
-                    } else {
-                        syntaxErrors.add(currentChar);
-                        switcher=false;
-                        break;
-                    }
-                } else if (currentChar == '>') {
-                    if (brackets.get(brackets.size() - 1) == '<') {
-                        brackets.remove(brackets.size() - 1);
-                    } else {
-                        syntaxErrors.add(currentChar);
-                        switcher=false;
-                        break;
-                    }
-                } else if (currentChar == ']') {
-                    if (brackets.get(brackets.size() - 1) == '[') {
-                        brackets.remove(brackets.size() - 1);
-                    } else {
-                        syntaxErrors.add(currentChar);
-                        switcher=false;
-                        break;
-                    }
-                } else {
-                    brackets.add(currentChar);
-                }
+        int height = input.size();
+        int width = input.get(0).length();
+        int[][] squids = new int[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                squids[y][x] = Character.getNumericValue(input.get(y).charAt(x));
             }
-            sum = 0l;
-            for (int i = brackets.size()-1; i >= 0; i--) {
-                currentChar = brackets.get(i);
-                System.out.print(currentChar);
-                int charValue = 0;
-                if (currentChar == '(') {
-                    charValue = 1;
-                } else if (currentChar == '[') {
-                    charValue = 2;
-                } else if (currentChar == '{') {
-                    charValue = 3;
-                } else if (currentChar == '<') {
-                    charValue = 4;
-                }
-                sum = sum*5;
-                sum += charValue;
-            }
-            System.out.println();
-            if (sum >= 0 && switcher==true) {
-                results.add(sum);
-            }
-            brackets = new ArrayList<Character>();
         }
-        Collections.sort(results);
-        System.out.println(results.toString());
-        System.out.println(results.get((results.size() / 2)));
-        System.out.println(results.size());
-        System.out.println(results.size() / 2);
-        //621817987
-        //621817986
+        System.out.println(Arrays.deepToString(squids));
+        int steps = 1000;
+        int hits = 0;
+        int totalHits=0;
+        for (int step = 1; step <= steps; step++) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    squids[y][x]++;
+                }
+            }
+            do {
+                System.out.println("true!");
+                hits = 0;
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        if (squids[y][x] > 9 && squids[y][x] < 19) {
+                            hits++;
+
+                            totalHits++;
+                            for (int locX = -1; locX <= 1; locX++) {
+                                for (int locY = -1; locY <= 1; locY++) {
+                                    if (y + locY >= 0 && y + locY < width && x + locX >= 0 && x + locX < width) {
+                                        squids[y + locY][x + locX]++;
+                                    }
+                                }
+                            }
+                            squids[y][x] = 20;
+                        }
+                    }
+                    System.out.println(hits + "hits");
+                }
+
+            } while (hits > 0);
+            int lights=0;
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    if (squids[y][x] > 9) {
+                        lights++;
+                        if(lights>=width*height) {
+                            System.out.println("result "+step);
+                            return;
+                        }
+                    }
+                }
+            }
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    if (squids[y][x] > 9) {
+                        squids[y][x] = 0;
+                    }
+                }
+            }
+
+            System.out.println(Arrays.deepToString(squids));
+        }
+        System.out.println(totalHits);
     }
 }
 
