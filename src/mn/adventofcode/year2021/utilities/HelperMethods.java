@@ -9,9 +9,11 @@ import java.util.Scanner;
 
 public class HelperMethods {
     public static ArrayList<String> readInput(int day) {
+
+
         ArrayList<String> input = new ArrayList<>();
         try {
-            File myObj = new File("/Users/max/Documents/AOCInput/inputDay"+day+".txt");
+            File myObj = new File("C:\\Temp\\inputDay"+day+".txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNext()) {
                 input.add(myReader.nextLine());
@@ -26,7 +28,7 @@ public class HelperMethods {
     public static ArrayList<Integer> readInputInt(int day) {
         ArrayList<Integer> input = new ArrayList<>();
         try {
-            File myObj = new File("/Users/max/Documents/AOCInput/inputDay"+day+".txt");
+            File myObj = new File("C:\\Temp\\inputDay"+day+".txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextInt()) {
                 input.add(myReader.nextInt());
@@ -40,7 +42,7 @@ public class HelperMethods {
     public static String readInputString(int day) {
         String input = "";
         try {
-            File myObj = new File("/Users/max/Documents/AOCInput/inputDay"+day+".txt");
+            File myObj = new File("C:\\Temp\\inputDay"+day+".txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 input+= myReader.nextLine()+" ";
