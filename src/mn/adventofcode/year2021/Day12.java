@@ -37,30 +37,32 @@ public class Day12 {
             current.add(val);
         }
 
-        ArrayList<String> paths = new ArrayList<String>(nodes.get("start").stream().toList());
-        ArrayList<String> deadEnds = new ArrayList<String>();
+        String[] paths = new String[1000];
+        int pathsIndex=0;
+        for (int i = 0; i < nodes.get("start").size(); i++) {
+            paths[pathsIndex]=nodes.get("start").get(i);
+            pathsIndex++;
+        }
+        ArrayList<String> deadEnds = new ArrayList<>();
+        ArrayList<String> tempPaths = new ArrayList<>();
 
         String currentThread = "start";
         String currentNode = "start";
+        int counter=0;
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < counter; i++) {
+                String path = paths[i];
+                String pathEnding = path.substring(path.length() - 2, path.length());
+                for (int k = 0; k < nodes.get(pathEnding).size(); k++) {
+                    path+=nodes.get(pathEnding).get(k);
+                }
 
-
-        for (int i = 0; i < paths.size(); i++) {
-            String path = paths.get(i);
-            String pathEnding = path.substring(path.length() - 2, path.length());
-            System.out.println(pathEnding);
-            for (int j = 0; j < nodes.get(pathEnding).size(); j++) {
 
             }
-        }
-        for (int i = 0; i < nodes.get(currentNode).size(); i++) {
-            currentNode = nodes.get(currentNode).get(i);
-            for (String path : paths
-            ) {
-                path += currentNode;
-            }
 
-            System.out.println(currentNode);
         }
+        System.out.println(nodes.toString());
+        System.out.println(paths.toString());
         return 0;
     }
 
