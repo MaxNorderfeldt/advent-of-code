@@ -1,9 +1,11 @@
 package mn.adventofcode.year2021;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import mn.adventofcode.year2021.utilities.HelperMethods;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class Day12 {
     public static int getResult() {
@@ -37,34 +39,52 @@ public class Day12 {
             current.add(val);
         }
 
-        String[] paths = new String[1000];
-        int pathsIndex=0;
-        for (int i = 0; i < nodes.get("start").size(); i++) {
-            paths[pathsIndex]=nodes.get("start").get(i);
-            pathsIndex++;
-        }
-        ArrayList<String> deadEnds = new ArrayList<>();
-        ArrayList<String> tempPaths = new ArrayList<>();
 
-        String currentThread = "start";
-        String currentNode = "start";
-        int counter=0;
-        for (int j = 0; j < 3; j++) {
-            for (int i = 0; i < counter; i++) {
-                String path = paths[i];
-                String pathEnding = path.substring(path.length() - 2, path.length());
-                for (int k = 0; k < nodes.get(pathEnding).size(); k++) {
-                    path+=nodes.get(pathEnding).get(k);
+        //Nodes = listarray
+        //get nodes connected to start add to paths(must be array and not listarray)
+        //for nodes connected to start
+        //check if node is "end" if so add to completed paths can be listArray
+        //Check if node connected to start == lowercase or "start"
+        //if not add to paths
+        //nodes = nodes
+        ArrayList<String> endings = new ArrayList<>();
+        ArrayList<String> paths = new ArrayList<>();
+        paths.add("start");
+        for (int i = 0; i < paths.size(); i++) {
+            System.out.println(i);
+            String currentPath = paths.get(i);
+            ArrayList<String> currentNode;
+            if (paths.get(i).equals("start")) {
+                System.out.println("stuck");
+                currentNode = nodes.get("start");
+            } else {
+                currentNode = nodes.get(currentPath.substring(currentPath.length() - 2));
+            }
+            for (int j = 0; j < currentNode.size(); j++) {
+                String currentEnding = currentNode.get(j);
+                if (Character.isLowerCase(currentEnding.charAt(0))) {
+                    if (currentEnding.equals("end")) {
+                        endings.add(currentPath + currentEnding);
+                    }
+                    else if (currentPath.contains(currentEnding)) {
+
+                    } else {
+                        paths.add(currentPath + currentEnding);
+                    }
+
+                } else {
+                    paths.add(currentPath + currentEnding);
                 }
 
-
             }
+            int pathsCounter = 1;
+            int newlyAdded = 1;
+
+            System.out.println(endings.size() + "endings");
+            System.out.println("-----");
+
 
         }
-        System.out.println(nodes.toString());
-        System.out.println(paths.toString());
         return 0;
     }
-
-
 }

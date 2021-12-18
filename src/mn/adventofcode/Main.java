@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Day13.getResult();
+        System.out.println(Day12.getResult());
 
     }
 }
