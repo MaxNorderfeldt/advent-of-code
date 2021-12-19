@@ -77,9 +77,6 @@ public class Day14 {
                 minLetter = counter;
             }
         }
-
-        System.out.println("Old: NC-NB-CH-B-0");
-        System.out.println(maxLetter-minLetter);
-        return 0;
+        return maxLetter-minLetter;
     }
 }
