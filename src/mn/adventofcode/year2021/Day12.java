@@ -51,11 +51,9 @@ public class Day12 {
         ArrayList<String> paths = new ArrayList<>();
         paths.add("start");
         for (int i = 0; i < paths.size(); i++) {
-            System.out.println(i);
             String currentPath = paths.get(i);
             ArrayList<String> currentNode;
             if (paths.get(i).equals("start")) {
-                System.out.println("stuck");
                 currentNode = nodes.get("start");
             } else {
                 currentNode = nodes.get(currentPath.substring(currentPath.length() - 2));
@@ -66,7 +64,14 @@ public class Day12 {
                     if (currentEnding.equals("end")) {
                         endings.add(currentPath + currentEnding);
                     }
+                    else if (currentEnding.contains("tart")) {
+
+                    }
                     else if (currentPath.contains(currentEnding)) {
+                        if(currentPath.charAt(0)=='X') {
+                        } else {
+                            paths.add("X"+currentPath.substring(1) + currentEnding);
+                        }
 
                     } else {
                         paths.add(currentPath + currentEnding);
@@ -80,11 +85,7 @@ public class Day12 {
             int pathsCounter = 1;
             int newlyAdded = 1;
 
-            System.out.println(endings.size() + "endings");
-            System.out.println("-----");
-
-
         }
-        return 0;
+        return endings.size();
     }
 }
